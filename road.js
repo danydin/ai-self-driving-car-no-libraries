@@ -12,6 +12,16 @@ class Road {
         const infinity = 1000000;
         this.top = 0;
         this.bottom = infinity;
+
+        // dynamic borders
+        const topLeft = {x: this.left, y: this.top};
+        const topRight = {x: this.right, y: this.top};
+        const bottomLeft = {x: this.left, y: this.bottom};
+        const bottomRight = {x: this.right, y: this.bottom};
+        this.borders = [
+            [topLeft, bottomLeft],
+            [topRight, bottomRight]
+        ]
     }
 
     getLaneCenter(laneIndex) {
@@ -22,7 +32,7 @@ class Road {
     draw(ctx) {
         ctx.lineWidth = 5;
         ctx.strokeStyle = "white";
-        
+        // calculate the position for every lane
         for (let i=0; i<=this.laneCount; i++) {
             // lerp function in the utils.js
             const x=lerp(
@@ -30,17 +40,20 @@ class Road {
                 this.right,
                 i / this.laneCount
             );
-
-            // draw vertical line
             ctx.beginPath();
-            if(i>0&&i<this.laneCount){
-                ctx.setLineDash([20, 20]);
-            } else {
-                ctx.setLineDash([20, 5]);
-            }
+            ctx.setLineDash([20, 20]);
+            ctx.beginPath();
             ctx.moveTo(x, this.top);
             ctx.lineTo(x, this.bottom);
             ctx.stroke();
         }
+        // dynamic borders
+        ctx.setLineDash([]);
+        this.borders.forEach(border=>{
+            ctx.beginPath();
+            ctx.moveTo(border[0].x,border[0].y);
+            ctx.lineTo(border[1].x,border[1].y);
+            ctx.stroke();
+        })
     }
 }
