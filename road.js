@@ -10,7 +10,7 @@ class Road {
 
         // create a long line
         const infinity = 1000000;
-        this.top = 0;
+        this.top = -infinity;
         this.bottom = infinity;
 
         // dynamic borders

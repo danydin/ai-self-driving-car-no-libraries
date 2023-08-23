@@ -57,7 +57,7 @@ class Car {
                 // old method: this.x += 2;
             }
         }
-
+        // circle
         this.x -= Math.sin(this.angle)*this.speed;
         this.y -= Math.cos(this.angle)*this.speed;
         // old method: this.y -= this.speed;
@@ -70,8 +70,8 @@ class Car {
         ctx.rotate(-this.angle)
         ctx.beginPath();
         ctx.rect(
-            - this.width / 2,
-            - this.height / 2,
+            -this.width / 2,
+            -this.height / 2,
             this.width,
             this.height
         );

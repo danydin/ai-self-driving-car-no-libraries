@@ -15,8 +15,12 @@ animate();
 function animate() {
     car.updateCarController();
     canvas.height = window.innerHeight;
+    context.save();
+    // camera/road movement instead of the car
+    context.translate(0, -car.y + canvas.height * 0.7)
     road.draw(context);
     car.draw(context);
+    context.restore();
     // loop what's in the parameter
     requestAnimationFrame(animate)
 }
