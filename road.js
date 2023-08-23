@@ -3,8 +3,9 @@ class Road {
         this.x = x;
         this.width = width;
         this.laneCount = laneCount;
-
+        // from the middle of the road CUT half
         this.left=x-width/2;
+        // from the middle of the road ADD half
         this.right=x+width/2;
 
         // create a long line
@@ -15,7 +16,7 @@ class Road {
 
     getLaneCenter(laneIndex) {
         const laneWidth = this.width/this.laneCount;
-        return this.left + laneWidth/2 + laneIndex*laneWidth;
+        return this.left + laneWidth/2 + Math.min(laneIndex, this.laneCount-1) * laneWidth;
     }
 
     draw(ctx) {
