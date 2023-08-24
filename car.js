@@ -13,13 +13,14 @@ class Car {
         this.friction = 0.05;
         this.angle = 0;
 
-        // reference to a a control object
+        this.sensors = new Sensors(this); 
         this.controller = new CarController();
     }
 
     updateCarController() {
-        // create another private method to make code cleaner
+        // call to a private method below to make code cleaner & safer
         this.#move()
+        this.sensors.update();
     }
 
     #move() {
@@ -57,7 +58,7 @@ class Car {
                 // old method: this.x += 2;
             }
         }
-        // circle
+
         this.x -= Math.sin(this.angle)*this.speed;
         this.y -= Math.cos(this.angle)*this.speed;
         // old method: this.y -= this.speed;
@@ -65,7 +66,7 @@ class Car {
 
     // method to draw the car on canvas
     draw(ctx) {
-        ctx.save();
+        ctx.save(); // disabling it still works same
         ctx.translate(this.x, this.y);
         ctx.rotate(-this.angle)
         ctx.beginPath();
@@ -77,5 +78,7 @@ class Car {
         );
         ctx.fill();
         ctx.restore();
+        
+        this.sensors.draw(ctx);
     }
 }
