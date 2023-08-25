@@ -13,7 +13,7 @@ const car = new Car(road.getLaneCenter(1),100,30,50);
 animate();
 
 function animate() {
-    car.updateCarController();
+    car.update(road.borders);
     canvas.height = window.innerHeight;
     context.save();
     // camera/road movement instead of the car

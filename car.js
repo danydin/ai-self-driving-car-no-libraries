@@ -17,10 +17,10 @@ class Car {
         this.controller = new CarController();
     }
 
-    updateCarController() {
+    update(roadBorders) {
         // call to a private method below to make code cleaner & safer
         this.#move()
-        this.sensors.update();
+        this.sensors.update(roadBorders);
     }
 
     #move() {
