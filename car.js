@@ -20,7 +20,32 @@ class Car {
     update(roadBorders) {
         // call to a private method below to make code cleaner & safer
         this.#move()
+        this.carStrcture = this.#carShape();
         this.sensors.update(roadBorders);
+    }
+
+
+    #carShape(){
+        const points = [];
+        const rad = Math.hypot(this.width, this.height)/2; // /2 becuase we want half of the size
+        const alpha = Math.atan2(this.width, this.height); // alpha is the angle is the same if divide2or not
+        points.push({
+            x: this.x-Math.sin(this.angle - alpha)*rad,
+            y: this.y-Math.cos(this.angle - alpha)*rad
+        });
+        points.push({
+            x: this.x-Math.sin(this.angle + alpha)*rad,
+            y: this.y-Math.cos(this.angle + alpha)*rad
+        });
+        points.push({
+            x: this.x-Math.sin(Math.PI + this.angle-alpha)*rad,
+            y: this.y-Math.cos(Math.PI + this.angle-alpha)*rad
+        });
+        points.push({
+            x: this.x-Math.sin(Math.PI + this.angle + alpha)*rad,
+            y: this.y-Math.cos(Math.PI + this.angle + alpha)*rad
+        });
+        return points;
     }
 
     #move() {
@@ -66,19 +91,12 @@ class Car {
 
     // method to draw the car on canvas
     draw(ctx) {
-        ctx.save(); // disabling it still works same
-        ctx.translate(this.x, this.y);
-        ctx.rotate(-this.angle)
         ctx.beginPath();
-        ctx.rect(
-            -this.width / 2,
-            -this.height / 2,
-            this.width,
-            this.height
-        );
+        ctx.moveTo(this.carStrcture[0].x, this.carStrcture[0].y);
+        for (let i = 1; i < this.carStrcture.length; i++) {
+            ctx.lineTo(this.carStrcture[i].x, this.carStrcture[i].y);
+        }
         ctx.fill();
-        ctx.restore();
-        
         this.sensors.draw(ctx);
     }
 }
