@@ -22,3 +22,20 @@ function getIntersection(A,B,C,D){
 
     return null;
 }
+
+function carIntersect(carShape, borders){
+    for (let i=0; i<carShape.length; i++){
+        for (let j=0; j<borders.length; j++){
+            const touch = getIntersection(
+                carShape[i],
+                carShape[(i+1)%carShape.length], // we use modular here becuase i=1 in the last iteration will cause an error as it foesnt exist in the array but with % it will return 0 & fix it
+                borders[j],
+                borders[(j+1)%borders.length]
+            );
+            if (touch){
+                return true;
+            }
+        }
+    }
+    return false; // if we reach until here there was no touch
+}

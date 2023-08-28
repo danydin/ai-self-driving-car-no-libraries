@@ -12,6 +12,7 @@ class Car {
         this.maxSpeed = 3;
         this.friction = 0.05;
         this.angle = 0;
+        this.damaged = false;
 
         this.sensors = new Sensors(this); 
         this.controller = new CarController();
@@ -19,13 +20,24 @@ class Car {
 
     update(roadBorders) {
         // call to a private method below to make code cleaner & safer
-        this.#move()
-        this.carStrcture = this.#carShape();
+        if(!this.damaged){
+            this.#move()
+            this.carStrcture = this.#createCarStrcture();
+            this.damaged = this.#assessDamage(roadBorders);
+        }
         this.sensors.update(roadBorders);
     }
 
+    #assessDamage(roadBorders) {
+        for (let i=0; i<roadBorders.length; i++) {
+            if (carIntersect(this.carStrcture, roadBorders[i])){
+                return true;
+            }
+        }
+        return false;
+    }
 
-    #carShape(){
+    #createCarStrcture(){
         const points = [];
         const rad = Math.hypot(this.width, this.height)/2; // /2 becuase we want half of the size
         const alpha = Math.atan2(this.width, this.height); // alpha is the angle is the same if divide2or not
@@ -91,6 +103,11 @@ class Car {
 
     // method to draw the car on canvas
     draw(ctx) {
+        if(this.damaged){
+            ctx.fillStyle = "gray"; // because we use line with thickness if we go a bit on the line it doesn't change to gray if we want it to change with a line thickness we need to change the border line to a rect instead so we can detect all its segements
+        } else {
+            ctx.fillStyle = "black";
+        }
         ctx.beginPath();
         ctx.moveTo(this.carStrcture[0].x, this.carStrcture[0].y);
         for (let i = 1; i < this.carStrcture.length; i++) {
