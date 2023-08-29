@@ -12,28 +12,38 @@ class Car {
         this.acceleration = 0.2;
         this.friction = 0.05;
         this.angle = 0;
-        this.damaged = false;
+        this.damaged = false; 
 
-        this.sensors = new Sensors(this); 
+        if(controlType != "BOT"){
+            this.sensors = new Sensors(this); 
+        }
         this.controller = new CarController(controlType);
     }
 
-    update(roadBorders) {
+    update(roadBorders, traffic) {
         // call to a private method below to make code cleaner & safer
         if(!this.damaged){
             this.#move()
             this.carStrcture = this.#createCarStrcture();
-            this.damaged = this.#assessDamage(roadBorders);
+            this.damaged = this.#assessDamage(roadBorders, traffic);
         }
-        this.sensors.update(roadBorders);
+        if(this.sensors){
+            this.sensors.update(roadBorders, traffic );
+        }
     }
 
-    #assessDamage(roadBorders) {
+    #assessDamage(roadBorders, traffic) {
         for (let i=0; i<roadBorders.length; i++) {
             if (carIntersect(this.carStrcture, roadBorders[i])){
                 return true;
             }
         }
+        for (let i=0; i<traffic.length; i++) {
+            if (carIntersect(this.carStrcture, traffic[i].carStrcture)){
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -106,7 +116,7 @@ class Car {
         if(this.damaged){
             ctx.fillStyle = "gray"; // because we use line with thickness if we go a bit on the line it doesn't change to gray if we want it to change with a line thickness we need to change the border line to a rect instead so we can detect all its segements
         } else {
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "blue";
         }
         ctx.beginPath();
         ctx.moveTo(this.carStrcture[0].x, this.carStrcture[0].y);
@@ -114,6 +124,8 @@ class Car {
             ctx.lineTo(this.carStrcture[i].x, this.carStrcture[i].y);
         }
         ctx.fill();
-        this.sensors.draw(ctx);
+        if(this.sensors){
+            this.sensors.draw(ctx);
+        }
     }
 }

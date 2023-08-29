@@ -17,9 +17,9 @@ animate();
 
 function animate() {
     for (i=0; i< traffic.length; i++) {
-        traffic[i].update(road.borders); 
+        traffic[i].update(road.borders, []); 
     }
-    car.update(road.borders);
+    car.update(road.borders, traffic);
     canvas.height = window.innerHeight;
     context.save();
     // camera/road movement instead of the car
