@@ -1,11 +1,17 @@
 class CarController {
-    constructor() {
+    constructor(type) {
         this.up = false;
         this.left = false;
         this.right = false;
         this.down = false;
-        // private method #
-        this.#addKeyboardListeners();
+        switch (type) {
+            case "KEYS":
+                this.#addKeyboardListeners();
+                break;
+            case "BOT":
+                this.up = true;
+                break;
+        }
     }
     #addKeyboardListeners() {
         document.onkeydown=(event)=>{

@@ -1,21 +1,21 @@
 // create car object
 class Car {
 // constrctor with parameters of the car
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, controlType, maxSpeed = 3) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.maxSpeed = maxSpeed;
 
         this.speed = 0;
         this.acceleration = 0.2;
-        this.maxSpeed = 3;
         this.friction = 0.05;
         this.angle = 0;
         this.damaged = false;
 
         this.sensors = new Sensors(this); 
-        this.controller = new CarController();
+        this.controller = new CarController(controlType);
     }
 
     update(roadBorders) {
