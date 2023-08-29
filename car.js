@@ -28,7 +28,7 @@ class Car {
             this.damaged = this.#assessDamage(roadBorders, traffic);
         }
         if(this.sensors){
-            this.sensors.update(roadBorders, traffic );
+            this.sensors.update(roadBorders, traffic);
         }
     }
 
@@ -112,11 +112,11 @@ class Car {
     }
 
     // method to draw the car on canvas
-    draw(ctx) {
+    draw(ctx, carColor) {
         if(this.damaged){
             ctx.fillStyle = "gray"; // because we use line with thickness if we go a bit on the line it doesn't change to gray if we want it to change with a line thickness we need to change the border line to a rect instead so we can detect all its segements
         } else {
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = carColor;
         }
         ctx.beginPath();
         ctx.moveTo(this.carStrcture[0].x, this.carStrcture[0].y);

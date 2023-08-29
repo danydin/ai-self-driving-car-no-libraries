@@ -26,9 +26,9 @@ function animate() {
     context.translate(0, -car.y + canvas.height * 0.7)
     road.draw(context);
     for (let i=0; i<traffic.length; i++){
-        traffic[i].draw(context);
+        traffic[i].draw(context, "red");
     }
-    car.draw(context);
+    car.draw(context, "blue");
     context.restore();
     // loop what's in the parameter
     requestAnimationFrame(animate)

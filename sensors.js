@@ -6,20 +6,26 @@ class Sensors{
         this.rayLength = 150; // pixels
         this.rayAngle = Math.PI/2; // changing this will change the angels of the rays, e.g. * 4 will ray 360 angles, while /2 wil be 90 degree angle
         this.rays = [];
-        this.outliners = [];
+        this.outliners = []; 
     }
 
-    update(roadBorders) {
+    update(roadBorders, traffic) {
         this.#castRays();
         this.outliners = []; 
         for(let i=0; i<this.rays.length; i++) {
-            this.outliners.push(
-                this.#detectors(this.rays[i], roadBorders)
+            this.outliners.push
+            (
+                this.#detectors
+                (
+                    this.rays[i],
+                    roadBorders,
+                    traffic
+                )
             );
         }
     }
 
-    #detectors(ray, roadBorders) {
+    #detectors(ray, roadBorders, traffic) {
          let touches = [];
          for (let i=0 ; i<roadBorders.length ; i++) {
             const touch = getIntersection(
@@ -30,6 +36,21 @@ class Sensors{
             );
             if (touch){
                 touches.push(touch);
+            }
+        }
+
+        for(let i=0; i<traffic.length; i++){
+            const carShape = traffic[i].carStrcture;
+            for(let j=0; j<carShape.length; j++){
+                const value = getIntersection(
+                    ray[0],
+                    ray[1],
+                    carShape[j],
+                    carShape[(j+1)%carShape.length] 
+                )
+                if(value){
+                    touches.push(value);
+                }
             }
         }
         
