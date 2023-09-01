@@ -1,4 +1,4 @@
-class Level() {
+class Level {
     constructor(inputsNodes, outputNodes) {
         this.inputs = new Array(inputsNodes); 
         this.outputs = new Array(outputNodes);
