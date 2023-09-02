@@ -12,7 +12,7 @@ class Layer {
         Level.#randomize(); // set the biases to random values
     }
 
-    // static hecause we need to seralize it
+    // static hecause we need to seralize 
     static #randomize(layer) {
 
     }
