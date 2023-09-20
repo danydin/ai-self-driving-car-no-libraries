@@ -8,7 +8,10 @@ class neuronNetwork{
         }
     }
 
-    
+    static algorithmNeurons(givenInputs, layer){
+        let outputs = Layer.
+    }
+
 }
 
 class Layer {
