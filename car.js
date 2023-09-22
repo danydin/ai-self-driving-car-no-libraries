@@ -15,7 +15,10 @@ class Car {
         this.damaged = false; 
 
         if(controlType != "BOT"){
-            this.sensors = new Sensors(this); 
+            this.sensor = new Sensor(this); 
+            // this.brain = new neuralNetwork(
+            //     [this.sensor.raysCount, 6, 4] // the second value is hidden layers/levels and last is the output for the 4 directions of the car 
+            // );
         }
         this.controller = new CarController(controlType);
     }
@@ -27,8 +30,11 @@ class Car {
             this.carStrcture = this.#createCarStrcture();
             this.damaged = this.#assessDamage(roadBorders, traffic);
         }
-        if(this.sensors){
-            this.sensors.update(roadBorders, traffic);
+        if(this.sensor){
+            this.sensor.update(roadBorders, traffic);
+
+            // const outputs = neuralNetwork.calculateOutputs(offsets, this.brain);
+            // console.log(outputs);
         }
     }
 
@@ -124,8 +130,8 @@ class Car {
             ctx.lineTo(this.carStrcture[i].x, this.carStrcture[i].y);
         }
         ctx.fill();
-        if(this.sensors){
-            this.sensors.draw(ctx);
+        if(this.sensor){
+            this.sensor.draw(ctx);
         }
     }
 }

@@ -1,4 +1,4 @@
-class Sensors{
+class Sensor{
     constructor(car) {
         this.car = car;
 
@@ -6,14 +6,14 @@ class Sensors{
         this.rayLength = 150; // pixels
         this.rayAngle = Math.PI/2; // changing this will change the angels of the rays, e.g. * 4 will ray 360 angles, while /2 wil be 90 degree angle
         this.rays = [];
-        this.outliners = []; 
+        this.readings = []; 
     }
 
     update(roadBorders, traffic) {
         this.#castRays();
-        this.outliners = []; 
+        this.readings = []; 
         for(let i=0; i<this.rays.length; i++) {
-            this.outliners.push
+            this.readings.push
             (
                 this.#detectors
                 (
@@ -86,8 +86,8 @@ class Sensors{
     draw(context) {
         for(let i=0; i<this.raysCount; i++){
             let endBorder = this.rays[i][1];
-            if(this.outliners[i]){
-                endBorder = this.outliners[i];
+            if(this.readings[i]){
+                endBorder = this.readings[i];
             }
 
             context.beginPath();
