@@ -67,16 +67,16 @@ class Level{
     }
 }
 
-class neuralNetwork{
-    constructor(neuronCounts){ // how mnay nodes per layer
-        this.levels = [];
-        console.log("ai.js")
-        for (let i=0;i<neuronCounts.length-1;i++){
-            this.levels.push(new Layer(
-                neuronCounts[i],neuronCounts[i+1]
-                ));
-        }
-    }
+// class neuralNetwork{
+//     constructor(neuronCounts){ // how mnay nodes per layer
+//         this.levels = [];
+//         console.log("ai.js")
+//         for (let i=0;i<neuronCounts.length-1;i++){
+//             this.levels.push(new Layer(
+//                 neuronCounts[i],neuronCounts[i+1]
+//                 ));
+//         }
+//     }
 
 //     // what we're doing here is putting the output of the last layer/level as the INPUT for the next layer/level
 //     static calculateOutputs(givenInputs, layer){
@@ -136,6 +136,4 @@ class neuralNetwork{
 //         }
 //         return layer.outputs;
 //     }
-
-// }
-
+//}
