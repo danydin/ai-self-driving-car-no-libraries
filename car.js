@@ -37,7 +37,7 @@ class Car {
                 s=>s==null? 0 : 1 - s.offset
             );
             // console.log(offsets)
-            const outputs = NeuralNetwork.feedForward(offsets, this.brain);
+            const outputs = NeuralNetwork.calculateOutputs(offsets, this.brain);
             console.log(outputs);
         }
     }
