@@ -3,7 +3,7 @@ class CarController {
         this.up = false;
         this.left = false;
         this.right = false;
-        this.down = false;
+        this.back = false;
         switch (type) {
             case "KEYS":
                 this.#addKeyboardListeners();
@@ -26,7 +26,7 @@ class CarController {
                     this.up = true;
                     break;
                 case "ArrowDown":
-                    this.down = true;
+                    this.back = true;
             }
             // console.table(this);
         }
@@ -43,7 +43,7 @@ class CarController {
                     this.up = false;
                     break;
                 case "ArrowDown":
-                    this.down = false;
+                    this.back = false;
             }
             // console.table(this);
         }

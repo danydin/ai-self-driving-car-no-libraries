@@ -14,6 +14,10 @@ class Car {
         this.angle = 0;
         this.damaged = false; 
 
+        // console.log(this.brain);
+        this.brain = controlType == "AI"; 
+        // console.log(this.brain);
+
         if(controlType != "BOT"){
             this.sensor = new Sensor(this); 
             this.brain = new NeuralNetwork(
@@ -21,7 +25,7 @@ class Car {
                 [this.sensor.raysCount, 2, 4]
             ); 
         }
-        this.controller = new CarController(controlType);
+        this.controls = new CarController(controlType);
     }
 
     update(roadBorders, traffic) {
@@ -38,7 +42,15 @@ class Car {
             );
             // console.log(offsets)
             const outputs = NeuralNetwork.calculateOutputs(offsets, this.brain);
+            // the ai outputs keys (forward , left, right, backwords) final decision
             console.log(outputs);
+
+            if(this.brain){
+                this.controls.up = outputs[0];
+                this.controls.left = outputs[1];
+                this.controls.right = outputs[2];
+                this.controls.back = outputs[3];
+            }
         }
     }
 
@@ -81,10 +93,10 @@ class Car {
     }
 
     #move() {
-        if(this.controller.up) {
+        if(this.controls.up) {
             this.speed += this.acceleration;
         }
-        if(this.controller.down) {
+        if(this.controls.back) {
             this.speed -= this.acceleration;
         }
         if(this.speed>this.maxSpeed) {
@@ -106,11 +118,11 @@ class Car {
 
         if(this.speed!=0){
             const flip = this.speed>0?1:-1;
-            if(this.controller.left){
+            if(this.controls.left){
                 this.angle += 0.03*flip;
                 // old method: this.x -= 2;
             }
-            if(this.controller.right){
+            if(this.controls.right){
                 this.angle -= 0.03*flip;
                 // old method: this.x += 2;
             }
