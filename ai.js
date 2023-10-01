@@ -1,7 +1,6 @@
 class NeuralNetwork{
     constructor(neuronCounts){ // how mnay nodes per layer
         this.levels = [];
-        console.log("ai.js")
         for (let i=0;i<neuronCounts.length-1;i++){
             this.levels.push(new Layer(
                 neuronCounts[i],neuronCounts[i+1]
@@ -19,6 +18,26 @@ class NeuralNetwork{
             }
         return outputs;
     }
+    static mutate(network, amount) {
+        network.levels.forEach(level => {
+            for (let i=0;i<level.biases.length;i++){
+                level.biases[i]=lerp(
+                    level.biases[i],
+                    Math.random() * 2 - 1,
+                    amount
+                )
+            }
+            for (let i=0; i<level.weights.length;i++){
+                for (let j=0; j<level.weights[i]; j++){
+                    level.weights[i][j]=lerp(
+                        level.weights[i][j],
+                        Math.random() * 2 - 1,
+                        amount
+                    )
+                }
+            }
+        });
+    }
 }
 
 class Layer {
@@ -27,9 +46,9 @@ class Layer {
         this.outputs = new Array(outputNodesCount);
         this.biases = new Array(outputNodesCount); // the number for each output which decide if this output/node will 'fire' or stay deactivated
 
-        this.nodesWeight = []; // each nodeWeight will decide if to fire or not depends on its value (between -1 adn 1) 
+        this.weights = []; // each nodeWeight will decide if to fire or not depends on its value (between -1 adn 1) 
         for (let i=0 ; i<inputsNodesCount; i++) {
-            this.nodesWeight[i] = new Array(outputNodesCount); // set the amounts of connections to the amounts of output heads basically for each output head we set a connection
+            this.weights[i] = new Array(outputNodesCount); // set the amounts of connections to the amounts of output heads basically for each output head we set a connection
         }
         
         Layer.#randomize(this); // set the biases to random values
@@ -39,7 +58,7 @@ class Layer {
     static #randomize(layer) {
         for(let i=0 ; i<layer.inputs.length;i++){
             for(let j=0 ; j<layer.outputs.length ; j++){
-                layer.nodesWeight[i][j] = Math.random() * 2 - 1; // generate random number between -1 and 1
+                layer.weights[i][j] = Math.random() * 2 - 1; // generate random number between -1 and 1
             }
         }
 
@@ -57,7 +76,7 @@ class Layer {
         for (let i=0; i < layer.outputs.length; i++){ // 1:44:21 video picture explanation
             let sum = 0
             for (let j=0 ; j<layer.inputs.length ; j++){
-                sum += layer.inputs[j] * layer.nodesWeight[j][i]; // pic explanation 1:44:41 
+                sum += layer.inputs[j] * layer.weights[j][i]; // pic explanation 1:44:41 
             }
             if (sum >  layer.biases[i]){
                 layer.outputs[i] = 1; 

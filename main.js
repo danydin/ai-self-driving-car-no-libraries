@@ -1,35 +1,103 @@
-// refernce the canvas
-const canvas = document.getElementById('myCanvas');
-// set the canvas height to screen hegiht
-// set the cavnas width to 200px
-canvas.width = 200;
-// reference to cavnas 2d
-const context = canvas.getContext('2d');
-const road = new Road(canvas.width/2, canvas.width*0.9)
-// creat a car object with x,y and its dimension
-const car = new Car(road.getLaneCenter(1), 100,30,50, "AI");
-const traffic = [
-    new Car(road.getLaneCenter(1), -100, 30, 50, "BOT", maxSpeed = 2)
-];
+// refernce the carCanvas
+const carCanvas = document.getElementById('carCanvas');
+carCanvas.width = 200;
 
+const networkCanvas = document.getElementById('networkCanvas');
+carCanvas.width = 300;
+
+const carCtx = carCanvas.getContext('2d');
+
+const networkCtx = networkCanvas.getContext('2d');
+
+const road = new Road(carCanvas.width/2, carCanvas.width*0.9)
+
+const cars = generateCars(100)
+
+let bestCar = cars[0];
+if(localStorage.getItem("bestBrain")){
+    for(i=0;i<cars.length;i++){
+        cars[i].brain = JSON.parse(localStorage.getItem("bestBrain"));
+        if(i!=0){
+            NeuralNetwork.mutate(cars[i].brain,0.2);
+        }
+    }
+}
+
+const traffic = [
+    new Car(road.getLaneCenter(1), -100, 30, 50, "BOT", maxSpeed = 2),
+    new Car(road.getLaneCenter(0), -300, 30, 50, "BOT", maxSpeed = 2),
+    new Car(road.getLaneCenter(2), -300, 30, 50, "BOT", maxSpeed = 2),
+    new Car(road.getLaneCenter(0), -500, 30, 50, "BOT", maxSpeed = 2),
+    new Car(road.getLaneCenter(2), -500, 30, 50, "BOT", maxSpeed = 2),
+    new Car(road.getLaneCenter(0), -700, 30, 50, "BOT", maxSpeed = 2),
+    new Car(road.getLaneCenter(2), -700, 30, 50, "BOT", maxSpeed = 2)
+];
 
 animate();
 
-function animate() {
+function save() {
+    localStorage.setItem(
+        "bestBrain",
+        JSON.stringify(bestCar.brain)
+    );
+}
+
+function discard() {
+    localStorage.removeItem("bestBrain");
+}
+
+function generateCars(N) {
+    const cars = [];
+    for (let i=1; i<=N; i++) {
+        // creat a car object at center lane, at y 100 , 30 width, 50 height
+        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50));
+    }
+    return cars;
+}
+
+function animate(time) {
     for (i=0; i< traffic.length; i++) {
         traffic[i].update(road.borders, []); 
     }
-    car.update(road.borders, traffic);
-    canvas.height = window.innerHeight;
-    context.save();
-    // camera/road movement instead of the car
-    context.translate(0, -car.y + canvas.height * 0.7)
-    road.draw(context);
-    for (let i=0; i<traffic.length; i++){
-        traffic[i].draw(context, "red");
+    for (let i=0;i<cars.length;i++){
+        cars[i].update(road.borders, traffic);
+
     }
-    car.draw(context, "blue");
-    context.restore();
-    // loop what's in the parameter
+
+     bestCar = cars.find(
+        c=>c.y==Math.min(
+            ...cars.map(c=>c.y)
+        )
+    );
+
+    carCanvas.height = window.innerHeight;
+
+    networkCanvas.height = window.innerHeight;
+    
+    carCtx.save();
+    // makes look as the road/camera moves instead of the car for the first car
+    carCtx.translate(0, -bestCar.y + carCanvas.height * 0.7)
+   
+    road.draw(carCtx);
+     
+    for (let i=0; i<traffic.length; i++){
+        traffic[i].draw(carCtx, "red");
+    }
+    carCtx.globalAlpha=0.2;
+    for (let i=0; i<cars.length; i++){
+        cars[i].draw(carCtx, "blue");
+
+    }
+    carCtx.globalAlpha=1;
+    bestCar.draw(carCtx,"blue", true)
+
+
+
+    carCtx.restore();
+    
+    networkCtx.lineDashOffset=-time/50;
+    // print the first car brain to the right visualizer
+    Visualizer.drawNetwork(networkCtx, bestCar.brain); 
+    // infite loop the arguemnet
     requestAnimationFrame(animate)
 }

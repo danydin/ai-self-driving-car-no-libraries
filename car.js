@@ -43,7 +43,7 @@ class Car {
             // console.log(offsets)
             const outputs = NeuralNetwork.calculateOutputs(offsets, this.brain);
             // the ai outputs keys (forward , left, right, backwords) final decision
-            console.log(outputs);
+            // console.log(outputs);
 
             if(this.brain){
                 this.controls.up = outputs[0];
@@ -134,7 +134,7 @@ class Car {
     }
 
     // method to draw the car on canvas
-    draw(ctx, carColor) {
+    draw(ctx, carColor, drawSensors = false) {
         if(this.damaged){
             ctx.fillStyle = "gray"; // because we use line with thickness if we go a bit on the line it doesn't change to gray if we want it to change with a line thickness we need to change the border line to a rect instead so we can detect all its segements
         } else {
@@ -146,7 +146,7 @@ class Car {
             ctx.lineTo(this.carStrcture[i].x, this.carStrcture[i].y);
         }
         ctx.fill();
-        if(this.sensor){
+        if(this.sensor && drawSensors){
             this.sensor.draw(ctx);
         }
     }
